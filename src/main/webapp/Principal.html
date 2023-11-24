@@ -15,6 +15,8 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
         <link href="css/styles.css" rel="stylesheet" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+              integrity="sha384-wvfXpqpZZVQGK6TAh5n0/2xXSvrM9M9sH5hZvLpzfNlAYBMwULFqNS2tMP+J5SZ6" crossorigin="anonymous">
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -34,7 +36,8 @@
                         <!--<li class="nav-item"><a class="nav-link" href="listado.jsp">Vista de Usuarios</a></li>-->
                         <!-- <li class="nav-item"><a class="nav-link" href="trabaja.html">Trabaja con nosotros</a></li>-->
                         <li class="nav-item"><a class="nav-link" href="Informacion.html">Las Cariñosas</a></li>
-                             <li class="nav-item"><a class="nav-link" href="chat.jsp">Ayuda</a></li>
+                        <button id="openChatBtn">AYUDA</button>
+
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -56,10 +59,10 @@
                                     Cambiar contraseña
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="index.html">
-                                        <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                        Cerrar Sesion
-                                    </a>
+                                <a class="dropdown-item" href="index.html">
+                                    <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
+                                    Cerrar Sesion
+                                </a>
                             </div>
                         </li>
                     </ul>
@@ -299,5 +302,107 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <link href="bot/chat.css" rel="stylesheet" type="text/css"/>
+
+        <!-- Contenedor del chat y del perrito -->
+        <div id="chat-container" style="display: none;">
+            <!-- Encabezado del chat con botones para minimizar y cerrar -->
+            <div class="chat-header">
+                <div></div>
+                <div>
+                    <button onclick="closeChat()" style="background: none; border: none; cursor: pointer;">
+                        <img src="bot/cerca.png" alt="Cerrar" width="20">
+                    </button>
+                </div>
+            </div>
+            <audio id="welcomeAudio">
+                <source src="bot/bot.mp3" type="audio/mpeg">
+                Your browser does not support the <code>audio</code> tag.
+            </audio>
+            <!-- Área del chat -->
+            <div id="chatbox"></div>
+            <!-- Campo de entrada del usuario y botón de enviar -->
+            <div style="display: flex; align-items: center;">
+                <input type="text" id="userInput" placeholder="Escribe tu mensaje..."
+                       style="flex: 1; padding: 8px; border: none; border-top: 1px solid #ddd; box-sizing: border-box; outline: none; margin: 10px;"
+                       onkeydown="if (event.keyCode == 13)
+                            sendMessage();">
+                <button id="sendBtn" onclick="sendMessage()"
+                        style="background: none; border: none; cursor: pointer;">
+                    <img src="bot/enviar-mensaje.png" alt="Enviar mensaje" width="20">
+                </button>
+            </div>
+        </div>
+
+        <!-- Contenedor del perrito y audio -->
+        <div id="puppyContainer" class="overlay" style="display: none;">
+            <img id="puppy" class="puppy" src="bot/bott.gif" alt="Perrito en movimiento">
+            <audio id="welcomeAudio">
+                <source src="bot/bot.mp3" type="audio/mpeg">
+            </audio>
+        </div>
+
+        <!-- Botón para abrir el chat y mostrar el perrito con música -->
+        <button id="openChatBtn">Abrir Chat</button>
+
+        <!-- Tu código JavaScript -->
+        <script>
+            var chatContainer = document.getElementById('chat-container');
+            var openChatBtn = document.getElementById('openChatBtn');
+
+            openChatBtn.addEventListener('click', function () {
+                showPuppyAndPlayAudio(); // Mostrar perrito y reproducir audio al abrir el chat
+            });
+
+            function minimizeChat() {
+                chatContainer.style.display = 'none'; // Oculta el chat pero mantiene la visibilidad
+            }
+
+            function closeChat() {
+                chatContainer.style.display = 'none'; // Oculta y borra el chat
+            }
+
+            function sendMessage() {
+                var userInput = document.getElementById('userInput').value;
+                var chatbox = document.getElementById('chatbox');
+
+                // Mostrar el mensaje del usuario en el chatbox
+                chatbox.innerHTML += '<p><strong>Tú:</strong> ' + userInput + '</p>';
+
+                // Simular respuesta del chatbot (puedes personalizar esto)
+                var botResponse = "¡Hola! Soy un Anghelo, el Administrador del Sistema. Gracias por tu mensaje: '" + userInput + "'";
+                chatbox.innerHTML += '<p><strong>Chatbot:</strong> ' + botResponse + '</p>';
+
+                // Limpiar el campo de entrada
+                document.getElementById('userInput').value = '';
+
+                // Hacer scroll hacia abajo para mostrar el último mensaje
+                chatbox.scrollTop = chatbox.scrollHeight;
+            }
+
+            function showPuppyAndPlayAudio() {
+                var puppyContainer = document.getElementById('puppyContainer');
+                var welcomeAudio = document.getElementById('welcomeAudio');
+
+                // Reproduce el audio
+                welcomeAudio.play();
+
+                // Muestra la imagen del perrito
+                puppyContainer.style.display = 'flex';
+
+                // Oculta el gif después de 4 segundos (4000 milisegundos)
+                setTimeout(function () {
+                    hidePuppy();
+                    chatContainer.style.display = 'flex'; // Mostrar el chat después de la animación del gif
+                }, 4000);
+            }
+
+            function hidePuppy() {
+                var puppyContainer = document.getElementById('puppyContainer');
+
+                // Oculta la imagen del perrito
+                puppyContainer.style.display = 'none';
+            }
+        </script>
     </body>
 </html>
