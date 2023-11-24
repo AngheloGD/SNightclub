@@ -29,6 +29,6 @@
             <input id="sendButton" onclick="send_message();" value="Enviar" type="button" disabled>
         </form>
 
-        <script src="websocket.js" type="text/javascript"></script>
+        <script type="text/javascript" src="websocket.js" ></script>
     </body>
 </html>

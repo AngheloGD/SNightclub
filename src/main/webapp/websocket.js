@@ -2,7 +2,7 @@
 // Variables globales
 var username;
 var chatRoomField = document.getElementById("chatRoomField");  // Agrega esta línea
-var websocket = new WebSocket("ws://localhost:8080/SistemaNightclub/chatroom");
+var websocket = new WebSocket("ws://192.168.1.57:8080/SistemaNightclub/chatroom");
 var aesKey;  // Variable para almacenar la clave AES
 
 // Nueva función para generar una clave secreta para AES
@@ -23,6 +23,13 @@ function decryptMessage(encryptedMessage, key) {
     var decrypted = CryptoJS.AES.decrypt(encryptedMessage, key);
     return decrypted.toString(CryptoJS.enc.Utf8);
 }
+
+// Añadir un evento al presionar la tecla "Enter" en el campo de entrada
+sendField.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        send_message();
+    }
+});
 
 websocket.onmessage = function (evt) {
     // Mostrar el mensaje cifrado en la consola
@@ -62,4 +69,7 @@ function send_message() {
     // Enviar el mensaje encriptado con AES
     var encryptedMessage = encryptMessage(username + ": " + sendField.value, aesKey);
     websocket.send(encryptedMessage);
+
+    // Limpiar el campo de entrada después de enviar el mensaje
+    sendField.value = "";
 }
