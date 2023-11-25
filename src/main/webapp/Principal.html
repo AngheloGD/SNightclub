@@ -38,7 +38,7 @@
                         <li class="nav-item"><a class="nav-link" href="Informacion.html">Las Cariñosas</a></li>
                         <li class="nav-item"><a class="nav-link" href="chat.jsp">CHAT</a></li>
                         <button id="openChatBtn">AYUDA</button>
-                       
+
 
                         <li class="nav-item dropdown no-arrow">
                             <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -310,7 +310,9 @@
         <div id="chat-container" style="display: none;">
             <!-- Encabezado del chat con botones para minimizar y cerrar -->
             <div class="chat-header">
-                <div></div>
+                <div>
+                    <span id="loggedInUsername"></span> <!-- Nuevo elemento para mostrar el nombre del usuario -->
+                </div>
                 <div>
                     <button onclick="closeChat()" style="background: none; border: none; cursor: pointer;">
                         <img src="bot/cerca.png" alt="Cerrar" width="20">
@@ -328,7 +330,7 @@
                 <input type="text" id="userInput" placeholder="Escribe tu mensaje..."
                        style="flex: 1; padding: 8px; border: none; border-top: 1px solid #ddd; box-sizing: border-box; outline: none; margin: 10px;"
                        onkeydown="if (event.keyCode == 13)
-                            sendMessage();">
+                                   sendMessage();">
                 <button id="sendBtn" onclick="sendMessage()"
                         style="background: none; border: none; cursor: pointer;">
                     <img src="bot/enviar-mensaje.png" alt="Enviar mensaje" width="20">
@@ -351,10 +353,31 @@
         <script>
             var chatContainer = document.getElementById('chat-container');
             var openChatBtn = document.getElementById('openChatBtn');
+            var loggedInUsernameSpan = document.getElementById('loggedInUsername'); // Nuevo elemento
+
+            var chatOpened = false;
 
             openChatBtn.addEventListener('click', function () {
-                showPuppyAndPlayAudio(); // Mostrar perrito y reproducir audio al abrir el chat
+                if (!chatOpened) {
+                    showPuppyAndPlayAudio(); // Mostrar perrito y reproducir audio al abrir el chat
+                    chatOpened = true;
+
+                    // Deshabilitar el botón temporalmente por, por ejemplo, 5 segundos
+                    openChatBtn.disabled = true;
+                    setTimeout(function () {
+                        openChatBtn.disabled = false;
+                    }, 5000);
+                }
             });
+
+            // Función para actualizar el nombre del usuario logueado
+            function updateLoggedInUsername() {
+                var username = localStorage.getItem('username');
+                loggedInUsernameSpan.textContent = username || ''; // Mostrar el nombre o dejar en blanco si no hay nombre
+            }
+
+            // Llamada inicial para mostrar el nombre del usuario si ya está logueado
+            updateLoggedInUsername();
 
             function minimizeChat() {
                 chatContainer.style.display = 'none'; // Oculta el chat pero mantiene la visibilidad
@@ -371,9 +394,20 @@
                 // Mostrar el mensaje del usuario en el chatbox
                 chatbox.innerHTML += '<p><strong>Tú:</strong> ' + userInput + '</p>';
 
-                // Simular respuesta del chatbot (puedes personalizar esto)
-                var botResponse = "¡Hola! Soy un Anghelo, el Administrador del Sistema. Gracias por tu mensaje: '" + userInput + "'";
-                chatbox.innerHTML += '<p><strong>Chatbot:</strong> ' + botResponse + '</p>';
+                // Simular respuestas del chatbot según la opción elegida por el usuario
+                if (userInput === '1') {
+                    chatbox.innerHTML += '<p><strong>Chatbot:</strong> Hola, si claro en nuestra pagina en los encabezados dice separar cita, seleccione su tipo de servicio y la trabajadora que desea.. ¡Provecho! :)</p>';
+                } else if (userInput === '2') {
+                    chatbox.innerHTML += '<p><strong>Chatbot:</strong> Hola, si claro en nuestra pagina en los encabezados existe "Las cariñosa", de clic allí para ver la información de las trabajadoras..</p>';
+                } else if (userInput === '3') {
+                    chatbox.innerHTML += '<p><strong>Chatbot:</strong> Puedes realizar cambios en tu pedido contactando a nuestro servicio al cliente.</p>';
+                } else {
+                    // Respuesta genérica si no se reconoce la opción
+                    chatbox.innerHTML += '<p><strong>Chatbot:</strong> No entiendo. ¿Puedes elegir una opción válida?</p>';
+
+                    // Enlace para comunicarse con el administrador
+                    chatbox.innerHTML += '<p><strong>Chatbot:</strong> Si no estás conforme con las respuestas, comunícate directamente con el administrador. <a href="chat.jsp">Haz clic aquí</a></p>';
+                }
 
                 // Limpiar el campo de entrada
                 document.getElementById('userInput').value = '';
@@ -385,14 +419,42 @@
             function showPuppyAndPlayAudio() {
                 var puppyContainer = document.getElementById('puppyContainer');
                 var welcomeAudio = document.getElementById('welcomeAudio');
+                var chatbox = document.getElementById('chatbox');
+                var loggedInUsernameSpan = document.getElementById('loggedInUsername');
 
-                // Reproduce el audio
+                // Obtener la hora actual
+                var currentHour = new Date().getHours();
+
+                // Definir el saludo basado en la hora del día
+                var greeting = "";
+                if (currentHour >= 5 && currentHour < 12) {
+                    greeting = "¡Buenos días!";
+                } else if (currentHour >= 12 && currentHour < 18) {
+                    greeting = "¡Buenas tardes!";
+                } else {
+                    greeting = "¡Buenas noches!";
+                }
+
+                // Agregar el nombre de usuario al saludo
+                updateLoggedInUsername(); // Actualizar el nombre del usuario antes de mostrar el saludo
+
+                // Reproducir el audio
                 welcomeAudio.play();
 
-                // Muestra la imagen del perrito
+                // Mostrar el saludo con el nombre del usuario en el chatbox
+                chatbox.innerHTML += '<p><strong>Chatbot:</strong> ' + greeting + ' ' +
+                        (loggedInUsernameSpan.textContent ? loggedInUsernameSpan.textContent + ', ' : '') +
+                        '¿En qué puedo ayudarte hoy?</p>';
+
+                // Preguntas
+                chatbox.innerHTML += '<p><strong>Chatbot:</strong> 1. ¿Cómo puedo realizar un pedido?</p>';
+                chatbox.innerHTML += '<p><strong>Chatbot:</strong> 2. ¿Cuáles son sus productos más populares?</p>';
+                chatbox.innerHTML += '<p><strong>Chatbot:</strong> 3. ¿Puedo realizar cambios en mi pedido?</p>';
+
+                // Mostrar la imagen del perrito
                 puppyContainer.style.display = 'flex';
 
-                // Oculta el gif después de 4 segundos (4000 milisegundos)
+                // Ocultar el gif después de 4 segundos (4000 milisegundos)
                 setTimeout(function () {
                     hidePuppy();
                     chatContainer.style.display = 'flex'; // Mostrar el chat después de la animación del gif
@@ -406,5 +468,6 @@
                 puppyContainer.style.display = 'none';
             }
         </script>
+
     </body>
 </html>
