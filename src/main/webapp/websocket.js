@@ -2,7 +2,7 @@
 // Variables globales
 var username;
 var chatRoomField = document.getElementById("chatRoomField");  // Agrega esta línea
-var websocket = new WebSocket("ws://192.168.1.57:8080/SistemaNightclub/chatroom");
+var websocket = new WebSocket("ws://192.168.1.43:8080/SistemaNightclub/chatroom");
 var aesKey;  // Variable para almacenar la clave AES
 
 // Nueva función para generar una clave secreta para AES

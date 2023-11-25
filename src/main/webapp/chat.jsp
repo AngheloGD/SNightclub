@@ -8,6 +8,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link href="css/Chat.css" rel="stylesheet" type="text/css"/>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Ayuda</title>
         <!-- Referencia a la biblioteca CryptoJS -->
