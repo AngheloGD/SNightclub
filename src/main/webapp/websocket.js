@@ -1,30 +1,25 @@
 // Variables globales
-// Variables globales
 var username;
-var chatRoomField = document.getElementById("chatRoomField");  // Agrega esta línea
-var websocket = new WebSocket("ws://192.168.1.43:8080/SistemaNightclub/chatroom");
-var aesKey;  // Variable para almacenar la clave AES
+var chatRoomField = document.getElementById("chatRoomField");
+var sendField = document.getElementById("sendField");  // Agrega esta línea
+var sendButton = document.getElementById("sendButton");  // Agrega esta línea
+var websocket = new WebSocket("ws://192.168.1.53:8080/SistemaNightclub/chatroom");
+var aesKey;
 
-// Nueva función para generar una clave secreta para AES
 function generateAESKey() {
-    // Implementa la generación de la clave aquí
-    // Devuelve la clave generada
-    return "clavegenerada";  // Reemplaza esto con la generación real de la clave
+    return "clavegenerada";
 }
 
-// Nueva función para encriptar mensajes con AES
 function encryptMessage(message, key) {
     var encrypted = CryptoJS.AES.encrypt(message, key);
     return encrypted.toString();
 }
 
-// Nueva función para desencriptar mensajes con AES
 function decryptMessage(encryptedMessage, key) {
     var decrypted = CryptoJS.AES.decrypt(encryptedMessage, key);
     return decrypted.toString(CryptoJS.enc.Utf8);
 }
 
-// Añadir un evento al presionar la tecla "Enter" en el campo de entrada
 sendField.addEventListener("keydown", function (event) {
     if (event.key === "Enter") {
         send_message();
@@ -32,44 +27,51 @@ sendField.addEventListener("keydown", function (event) {
 });
 
 websocket.onmessage = function (evt) {
-    // Mostrar el mensaje cifrado en la consola
     console.log("Mensaje cifrado recibido:", evt.data);
-
-    // Descifrar el mensaje recibido con AES
     var decryptedMessage = decryptMessage(evt.data, aesKey);
-
-    // Mostrar el mensaje descifrado en la consola
     console.log("Mensaje descifrado:", decryptedMessage);
 
-    // Mostrar el mensaje descifrado en el cuadro de mensajes
-    chatRoomField.innerHTML += decryptedMessage + "\n";
+    // Verifica si el mensaje tiene contenido
+    if (decryptedMessage.trim() !== "") {
+        var currentContent = chatRoomField.innerHTML;
+        var messageArray = decryptedMessage.split(":");
+        var senderUsername = messageArray[0];
+        var messageContent = messageArray.slice(1).join(":"); // Reunir el resto del array como contenido del mensaje
+        var messageClass = username === senderUsername ? "me" : "other";
+
+        // Verifica si el mensaje proviene del usuario actual
+        if (messageClass === "me") {
+            // Si es el usuario actual, solo muestra el contenido del mensaje
+            chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + messageContent + '</div>';
+        } else {
+            // Si es otro usuario, muestra el nombre de usuario y el contenido del mensaje
+            chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + senderUsername + ': ' + messageContent + '</div>';
+        }
+
+        chatRoomField.scrollTop = chatRoomField.scrollHeight;
+    }
 };
 
 function join() {
-    username = newUserField.value;
-    newUserField.disabled = true;
-    newUserButton.disabled = true;
+    username = document.getElementById("newUserField").value;  // Cambia newUserField.value a document.getElementById("newUserField").value
+    document.getElementById("newUserField").disabled = true;  // Cambia newUserField.disabled a document.getElementById("newUserField").disabled
+    document.getElementById("newUserButton").disabled = true;
     chatRoomField.disabled = false;
     sendField.disabled = false;
     sendButton.disabled = false;
 
-    // Generar y enviar la clave AES al servidor
     aesKey = generateAESKey();
     websocket.send("AES_KEY:" + btoa(aesKey));
 
-    // Mostrar el mensaje de unión del usuario en el cuadro de mensajes
     var joinMessage = "* " + username + " se ha unido!!";
-    chatRoomField.innerHTML += joinMessage + "\n";
+    chatRoomField.innerHTML += '<div class="chat-message">' + joinMessage + '</div>';
 
-    // Enviar el mensaje de unión del usuario al servidor
     websocket.send(username + " se ha unido!!");
 }
 
 function send_message() {
-    // Enviar el mensaje encriptado con AES
     var encryptedMessage = encryptMessage(username + ": " + sendField.value, aesKey);
     websocket.send(encryptedMessage);
 
-    // Limpiar el campo de entrada después de enviar el mensaje
     sendField.value = "";
 }

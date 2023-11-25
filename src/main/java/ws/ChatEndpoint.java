@@ -25,22 +25,16 @@ public class ChatEndpoint {
     @OnMessage
     public void message(String message, Session client) throws IOException, EncodeException {
         if (message.equals("INIT_DH")) {
-            // Iniciar el intercambio Diffie-Hellman
             generateKeys();
-            System.out.println("Server Private Key: " + privateKey);
-            System.out.println("Server Public Key: " + publicKey);
 
-            // Enviar la clave pública al cliente
             String publicKeyMessage = "PUBLIC_KEY:" + Base64.getEncoder().encodeToString(publicKey.toByteArray());
             client.getBasicRemote().sendText(publicKeyMessage);
         } else if (message.startsWith("PUBLIC_KEY:")) {
-            // Procesar la clave pública del cliente y calcular la clave compartida
             String base64Key = message.substring("PUBLIC_KEY:".length());
             BigInteger clientPublicKey = new BigInteger(Base64.getDecoder().decode(base64Key));
             sharedSecret = clientPublicKey.modPow(privateKey, P);
             System.out.println("Shared Secret: " + sharedSecret);
         } else {
-            // Mensaje normal
             for (Session openSession : client.getOpenSessions()) {
                 openSession.getBasicRemote().sendText(message);
             }
