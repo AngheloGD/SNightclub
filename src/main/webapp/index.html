@@ -4,7 +4,7 @@
         <title>Inicio de Sesión</title>
         <meta charset="UTF-8">
         <link href="css/Login.css" rel="stylesheet" type="text/css" />
-             <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
+        <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
     </head>
     <body>
         <div class="wrapper">
@@ -62,7 +62,7 @@
                                 localStorage.setItem('username', usuario);
                                 setTimeout(function () {
                                     window.location.href = "Principal.html";
-                                }, 2000); // Redirige después de 2 segundos localStorage.setItem('username', usuario);
+                                }, 15000); // Redirige después de 2 segundos localStorage.setItem('username', usuario);
                             } else {
                                 mostrarError("Error");
                             }
