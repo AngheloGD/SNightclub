@@ -8,11 +8,18 @@
         <link rel="icon" type="image/x-icon" href="data:image/x-icon;,">
         <link href="css/ChatStyle.css" rel="stylesheet" type="text/css"/>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    </head>
+        </head>
     <body>
-        <h2>Ayuda al cliente</h2>
-        <button onclick="goToPrincipalPage()">Ir a la página principal</button>
+        <div class="flex-container">
+            <div>
+                <button class="button red" onclick="goToPrincipalPage()">Ir a la página principal</button>
+            </div>
+            <div class="center-container">
+                <h2>Ayuda al cliente</h2>
+            </div>
+        </div>
         <form>
+
             <input id="newUserField" name="user" value="" type="text"> 
             <input id="newUserButton" onclick="join();" value="Entrar" type="button">
 
