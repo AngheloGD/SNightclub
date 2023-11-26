@@ -1,8 +1,8 @@
 // Variables globales
 var username;
 var chatRoomField = document.getElementById("chatRoomField");
-var sendField = document.getElementById("sendField");  // Agrega esta línea
-var sendButton = document.getElementById("sendButton");  // Agrega esta línea
+var sendField = document.getElementById("sendField");
+var sendButton = document.getElementById("sendButton");
 var websocket = new WebSocket("ws://192.168.1.53:8080/SistemaNightclub/chatroom");
 var aesKey;
 
@@ -52,10 +52,10 @@ websocket.onmessage = function (evt) {
             // Verifica si el mensaje proviene del usuario actual
             if (messageClass === "me") {
                 // Si es el usuario actual, solo muestra el contenido del mensaje
-                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + messageContent + '</div>';
+                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '"><div class="chat-message-content">' + messageContent + '</div></div>';
             } else {
                 // Si es otro usuario, muestra el nombre de usuario y el contenido del mensaje
-                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + senderUsername + ': ' + messageContent + '</div>';
+                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '"><div class="chat-message-content">' + senderUsername + ': ' + messageContent + '</div></div>';
             }
 
             chatRoomField.scrollTop = chatRoomField.scrollHeight;
@@ -63,11 +63,18 @@ websocket.onmessage = function (evt) {
     }
 };
 
-
-
 function join() {
-    username = document.getElementById("newUserField").value;  // Cambia newUserField.value a document.getElementById("newUserField").value
-    document.getElementById("newUserField").disabled = true;  // Cambia newUserField.disabled a document.getElementById("newUserField").disabled
+    // Mostrar la animación de carga
+    $(".loading-image").show();
+
+    // Después de 2 segundos, ocultar la animación y mostrar los elementos del chat con la animación de desvanecer
+    setTimeout(function () {
+        $(".loading-image").hide();
+        $("#chatRoomField, #sendField, #sendButton").addClass("fade-in").removeClass("hidden");
+    }, 3000);
+    
+    username = document.getElementById("newUserField").value;
+    document.getElementById("newUserField").disabled = true;
     document.getElementById("newUserButton").disabled = true;
     chatRoomField.disabled = false;
     sendField.disabled = false;
@@ -77,7 +84,7 @@ function join() {
     websocket.send("AES_KEY:" + btoa(aesKey));
 
     var joinMessage = "* " + username + " se ha unido!!";
-    chatRoomField.innerHTML += '<div class="chat-message">' + joinMessage + '</div>';
+    chatRoomField.innerHTML += '<div class="chat-message"><div class="chat-message-content">' + joinMessage + '</div></div>';
 
     websocket.send(username + " se ha unido!!");
 }
@@ -89,3 +96,17 @@ function send_message() {
 
     sendField.value = "";
 }
+
+// Función para redirigir a principal.html
+function goToPrincipalPage() {
+    window.location.href = 'Principal.html';
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    var storedUsername = localStorage.getItem('username');
+
+    if (storedUsername) {
+        // Insertar el nombre de usuario en el campo de entrada
+        document.getElementById("newUserField").value = storedUsername;
+    }
+});

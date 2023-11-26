@@ -1,18 +1,12 @@
-/*
-Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
-Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/CascadeStyleSheet.css to edit this template
-*/
-/* 
-    Created on: 24 nov. 2023, 21:18:17
-    Author: HP
-*/
-
+/* Estilos generales */
 /* Estilos generales */
 body {
     font-family: 'Lemon', sans-serif;
-    background: url('../assets/img/padrino.jpg') no-repeat center center fixed;
+    background: url('../assets/img/fondochat.jpg') no-repeat center center fixed;
     background-size: cover;
+    background-position: center top; /* Ajusta la posición vertical de la imagen */
     margin: 0;
+    height: 100%;
 }
 
 h2 {
@@ -21,6 +15,17 @@ h2 {
     color: #FF3366;
     text-align: center;
     margin-top: 20px;
+    animation: scaleEffect 3s ease-in-out infinite; /* Animación de agrandar y achicar */
+    margin-right:  300px;
+}
+
+@keyframes scaleEffect {
+    0%, 100% {
+        transform: scale(1); /* Escala normal al inicio y al final */
+    }
+    50% {
+        transform: scale(1.2); /* Escala más grande a la mitad de la animación */
+    }
 }
 
 form {
@@ -49,7 +54,7 @@ input[type="button"] {
     max-height: 320px;
     overflow-y: auto;
     margin-top: 10px;
-    box-shadow: 0 0 10px 5px #00ff00;
+     box-shadow: 0 0 10px 5px #ff0000; /* Estilo del resplandor rojo */
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(255, 255, 255, 0.5);
@@ -62,11 +67,25 @@ input[type="button"] {
     margin-top: 10px;
     border-radius: 10px;
     clear: both;
+    position: relative;
+    overflow: hidden; /* Oculta el contenido que sobresale */
+}
+
+.chat-message::before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+  
+    background-size: cover;
 }
 
 /* Estilos para las burbujas de chat del usuario actual */
 .chat-message.me {
-    background-color: #4CAF50;
+    background-color: #ff0000;
     color: white;
     float: right;
 }
@@ -75,6 +94,12 @@ input[type="button"] {
 .chat-message.other {
     background-color: #ddd;
     float: left;
+}
+
+/* Nueva clase para el contenido dentro de la burbuja */
+.chat-message-content {
+    overflow: hidden;
+    word-wrap: break-word; /* Permite dividir palabras largas para que encajen en el contenedor */
 }
 
 input[type="text"]#sendField {
@@ -86,42 +111,95 @@ input[type="text"]#sendField {
 
 /* Estilos para el botón Ir a la página principal */
 button.red {
-    font-family: 'Lemon', sans-serif; /* Cambia a la fuente 'Lemon' */
-    color: #465f25;
+    font-family: 'Lemon', sans-serif;
+    color: white; /* Cambiado a color blanco */
     text-shadow: 0 1px #d9f3b5;
-    background: #94d362;
-    border-color: #91ce5e #7ab04b #5e903f;
-    background-image: -webkit-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-    background-image: -moz-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-    background-image: -o-linear-gradient(top, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-    background-image: linear-gradient(to bottom, #c0eb85 0%, #94d362 70%, #8ed258 100%);
-    -webkit-box-shadow: inset 0 1px #d9f3b5, inset 0 0 0 1px #b1e095, 0 1px #5e903f, 0 3px #6da445, 0 4px #5e903f, 0 5px 2px rgba(0, 0, 0, 0.4);
-    box-shadow: inset 0 1px #d9f3b5, inset 0 0 0 1px #b1e095, 0 1px #5e903f, 0 3px #6da445, 0 4px #5e903f, 0 5px 2px rgba(0, 0, 0, 0.4);
-
-    /* Ajustes para hacer el botón más grande y moverlo del borde */
-    padding: 15px 30px; /* Ajusta el tamaño del botón */
-    margin: 20px; /* Ajusta la distancia del botón al borde de la página */
+    background: linear-gradient(to right, #ff0000, #dc143c); /* Cambiado a rojo pasión */
+    border-color: darkgoldenrod;
+    border-radius: 2em;
+    width: 250px;
+    height: calc(250px / 3);
+    text-align: center;
+    line-height: calc(250px / 3);
+    font-size: calc(200px / 10);
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: 0.5s;
+    position: relative;
+    overflow: hidden;
 }
 
-button.red:hover, button.red:active {
-    background: #94d362;
-    border-top-color: #82bd53;
+button.red:hover {
+    transform: perspective(500px) rotateY(15deg);
+    text-shadow: -6px 3px 2px rgba(0, 0, 0, 0.2);
+    box-shadow: -2px 0 0 5px rgba(0, 0, 0, 0.2);
 }
+
+button.red::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, white, transparent);
+    left: -100%;
+    transition: 0.5s;
+}
+
+button.red:hover::before {
+    left: 100%;
+}
+
 .button {
-    margin-right: 10px; /* Ajusta el margen según sea necesario */
+    margin-right: 10px;
 }
-
 .flex-container {
     display: flex;
-    justify-content: space-between; /* Coloca el contenido en los extremos */
-    align-items: center; /* Centra verticalmente el contenido */
+    justify-content: space-between;
+    align-items: center;
 }
 
 .center-container {
-    text-align: right; /* Alinea el texto del h2 a la izquierda */
-    flex-grow: 1; /* Hace que este contenedor ocupe el espacio restante */
+    text-align: right;
+    flex-grow: 1;
 }
 
-h2 {
-    margin-right:  300px; /* Ajusta el margen izquierdo según sea necesario */
+
+/* Nueva clase para la imagen del bailarín */
+.dancer-image {
+    position: absolute;
+    left: -50px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 300px;
+    height: 300px;
+    background: url('../assets/img/bailarina.gif') no-repeat;
+    background-size: cover;
+}
+.loading-image {
+    position: absolute;
+    left: 50%;
+    top: 70%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: 300px;
+    background: url('../assets/img/cargando.gif') no-repeat;
+    background-size: contain;
+    display: none;
+}
+
+/* Agregamos una clase para la animación de desvanecer */
+.fade-in {
+    animation: fadeIn 2s ease-in-out; /* Duración de 2 segundos */
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+.hidden {
+    display: none;
 }
