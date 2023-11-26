@@ -10,8 +10,9 @@ function generateAESKey() {
     return "clavegenerada";
 }
 
-function encryptMessage(message, key) {
-    var encrypted = CryptoJS.AES.encrypt(message, key);
+function encryptMessage(username, message, key) {
+    var combinedMessage = username + ": " + message; // Combina nombre de usuario y mensaje
+    var encrypted = CryptoJS.AES.encrypt(combinedMessage, key);
     return encrypted.toString();
 }
 
@@ -28,29 +29,41 @@ sendField.addEventListener("keydown", function (event) {
 
 websocket.onmessage = function (evt) {
     console.log("Mensaje cifrado recibido:", evt.data);
+
+    // Intenta descifrar el mensaje
     var decryptedMessage = decryptMessage(evt.data, aesKey);
-    console.log("Mensaje descifrado:", decryptedMessage);
 
-    // Verifica si el mensaje tiene contenido
-    if (decryptedMessage.trim() !== "") {
-        var currentContent = chatRoomField.innerHTML;
-        var messageArray = decryptedMessage.split(":");
-        var senderUsername = messageArray[0];
-        var messageContent = messageArray.slice(1).join(":"); // Reunir el resto del array como contenido del mensaje
-        var messageClass = username === senderUsername ? "me" : "other";
+    if (decryptedMessage.startsWith("AES_KEY:")) {
+        // Este mensaje contiene la clave AES
+        var base64Key = decryptedMessage.substring("AES_KEY:".length);
+        aesKey = atob(base64Key);  // Decodificar la clave desde base64
+        console.log("Clave AES recibida: " + aesKey);
+    } else {
+        console.log("Mensaje descifrado:", decryptedMessage);
 
-        // Verifica si el mensaje proviene del usuario actual
-        if (messageClass === "me") {
-            // Si es el usuario actual, solo muestra el contenido del mensaje
-            chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + messageContent + '</div>';
-        } else {
-            // Si es otro usuario, muestra el nombre de usuario y el contenido del mensaje
-            chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + senderUsername + ': ' + messageContent + '</div>';
+        // Verifica si el mensaje tiene contenido
+        if (decryptedMessage.trim() !== "") {
+            var currentContent = chatRoomField.innerHTML;
+            var messageArray = decryptedMessage.split(":");
+            var senderUsername = messageArray[0];
+            var messageContent = messageArray.slice(1).join(":"); // Reunir el resto del array como contenido del mensaje
+            var messageClass = username === senderUsername ? "me" : "other";
+
+            // Verifica si el mensaje proviene del usuario actual
+            if (messageClass === "me") {
+                // Si es el usuario actual, solo muestra el contenido del mensaje
+                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + messageContent + '</div>';
+            } else {
+                // Si es otro usuario, muestra el nombre de usuario y el contenido del mensaje
+                chatRoomField.innerHTML = currentContent + '<div class="chat-message ' + messageClass + '">' + senderUsername + ': ' + messageContent + '</div>';
+            }
+
+            chatRoomField.scrollTop = chatRoomField.scrollHeight;
         }
-
-        chatRoomField.scrollTop = chatRoomField.scrollHeight;
     }
 };
+
+
 
 function join() {
     username = document.getElementById("newUserField").value;  // Cambia newUserField.value a document.getElementById("newUserField").value
@@ -70,7 +83,8 @@ function join() {
 }
 
 function send_message() {
-    var encryptedMessage = encryptMessage(username + ": " + sendField.value, aesKey);
+    var messageContent = sendField.value;
+    var encryptedMessage = encryptMessage(username, messageContent, aesKey);
     websocket.send(encryptedMessage);
 
     sendField.value = "";

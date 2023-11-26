@@ -33,6 +33,9 @@
                             <label for="trabajadora">Trabajadora:</label>
                             <select class="form-control" id="trabajadora" name="trabajadora">
                                 <!-- Opciones para trabajadoras -->
+                                <option value="Chaky">Chaky</option>
+                                <option value="Dayanita">Dayanita</option>
+                                <option value="Jossmery">Jossmery</option>
                             </select>
                         </div>
                         <div class="form-group">
