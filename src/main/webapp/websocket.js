@@ -72,7 +72,7 @@ function join() {
         $(".loading-image").hide();
         $("#chatRoomField, #sendField, #sendButton").addClass("fade-in").removeClass("hidden");
     }, 3000);
-    
+
     username = document.getElementById("newUserField").value;
     document.getElementById("newUserField").disabled = true;
     document.getElementById("newUserButton").disabled = true;
