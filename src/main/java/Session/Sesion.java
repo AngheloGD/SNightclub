@@ -12,11 +12,10 @@ import javax.servlet.http.HttpSession;
  */
 public class Sesion {
 
-    public static void crearsesion(HttpSession session, int codiUsua, String logiUsua, String nombUsua) {
+    public static void crearsesion(HttpSession session, String logiUsua, String passUsua) {
         session.setAttribute("logueado", "1");
-        session.setAttribute("codiUsua", codiUsua);
         session.setAttribute("logiUsua", logiUsua);
-        session.setAttribute("nombUsua", nombUsua);
+        session.setAttribute("passUsua", passUsua);
     }
 
     public static boolean sesionvalida(HttpSession session) {
@@ -29,9 +28,8 @@ public class Sesion {
 
     public static void cerrarsesion(HttpSession session) {
         session.removeAttribute("logueado");
-        session.removeAttribute("codiUsua");
         session.removeAttribute("logiUsua");
-        session.removeAttribute("nombUsua");
+        session.removeAttribute("passUsua");
         session.invalidate();
     }
 

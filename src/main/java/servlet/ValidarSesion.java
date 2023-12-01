@@ -37,18 +37,14 @@ public class ValidarSesion extends HttpServlet {
             /* TODO output your page here. You may use following sample code. */
             try {
                 HttpSession session = request.getSession(true);
-                String logueado = session.getAttribute("logueado").toString();
-                String codiUsua = session.getAttribute("codiUsua").toString();
-                String logiUsua = session.getAttribute("logiUsua").toString();
-                String nombUsua = session.getAttribute("nombUsua").toString();
-                if (logueado == null) {
+                String logueado = (String) session.getAttribute("logueado");
+
+                if (logueado == null || !logueado.equals("1")) {
                     out.println("{\"resultado\":\"error\"}");
                 } else {
-                    if (session.getAttribute("logueado").toString().equals("1")) {
-                        out.println("{\"resultado\":\"ok\",\"codiUsua\":\"" + codiUsua + "\",\"logiUsua\":\"" + logiUsua + "\",\"nombUsua\":\"" + nombUsua + "\"}");
-                    } else {
-                        out.println("{\"resultado\":\"error\"}");
-                    }
+                    String logiUsua = (String) session.getAttribute("logiUsua");
+                    String passUsua = (String) session.getAttribute("passUsua");
+                    out.println("{\"resultado\":\"ok\",\"logiUsua\":\"" + logiUsua + "\",\"passUsua\":\"" + passUsua + "\"}");
                 }
             } catch (Exception ex) {
                 out.println("{\"resultado\":\"error\"}");

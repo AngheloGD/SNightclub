@@ -84,7 +84,7 @@
             </div>
         </header>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
+        <!--<script>
             $(document).ready(function () {
                 // Obtener el nombre de usuario almacenado en LocalStorage mas na
                 var username = localStorage.getItem('username');
@@ -95,7 +95,7 @@
                     $("#usernameSpan").text(username);
                 }
             });
-        </script>
+        </script>-->
         <!-- Services-->
         <section class="page-section" id="services">
             <div class="container">
@@ -292,19 +292,19 @@
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
         <script>
-                $(document).ready(function () {
-                    $.getJSON("validarsesion", function (data) {
-                        if (data.resultado === "ok") {
-                            // CARGA DE INTERFACES
-                            $('#topbar').load('topbar.html');
-                            // $('#sidebar').load('sidebar.html');
-                            $('#footer').load('footer.html');
-                        } else {
-                            $(location).attr('href', "index.html");
-                        }
+                $.getJSON("validarSesion", function (data) {
+    console.log("Resultado de validarSesion:", data.resultado);
+    if (data.resultado === "ok") {
+        console.log("Redirigiendo a Principal.html");
+        $(location).attr('href', "Principal.html");
+    } else {
+        console.log("Redirigiendo a index.html");
+        $(location).attr('href', "index.html");
+    }
+});
 
                         // CERRAR SESIÓN   
-                        $("#cerrarSession").click(function (event) {
+                        $("#cerrarSesion").click(function (event) {
                             event.preventDefault(); // Prevenir la acción predeterminada del enlace
                             cerrarSesion();
                             $(location).attr('href', "index.html");

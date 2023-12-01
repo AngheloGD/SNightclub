@@ -34,11 +34,11 @@ public class RegistrarSesion extends HttpServlet {
         response.setContentType("text/html;charset=UTF-8");
         try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
-            String codiUsua = request.getParameter("codiUsua");
+
             String logiUsua = request.getParameter("logiUsua");
-            String nombUsua = request.getParameter("nombUsua");
-            Sesion.crearsesion(request.getSession(true), Integer.parseInt(codiUsua),
-                    logiUsua, nombUsua);
+            String passUsua = request.getParameter("passUsua");
+            Sesion.crearsesion(request.getSession(true),
+                    logiUsua, passUsua);
             out.print("{\"resultado\":\"ok\"}");
         }
     }
