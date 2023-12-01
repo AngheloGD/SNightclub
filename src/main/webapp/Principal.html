@@ -61,7 +61,7 @@
                                     Cambiar contraseña
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a id="cerrarSesion" class="dropdown-item" >
+                                <a id="salir" class="dropdown-item" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Cerrar Sesión
                                 </a>
@@ -292,10 +292,6 @@
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-            $(document).ready(function () {
-                verificarSesion();
-            });
-
             function verificarSesion() {
                 $.ajax({
                     url: 'validarSesion',
@@ -317,6 +313,31 @@
                     }
                 });
             }
+
+            function cerrarSesion(redirectURL) {
+                $.getJSON("cerrarSession", function (data) {
+                    // Después de cerrar sesión, reemplaza la entrada actual en el historial
+                    // con una nueva entrada que apunta a "index.html".
+                    history.replaceState({}, 'Index', 'index.html');
+
+                    // Redirige a la URL de redirección especificada (o a "index.html" por defecto)
+                    if (redirectURL) {
+                        window.location.href = redirectURL;
+                    } else {
+                        window.location.href = "index.html";
+                    }
+
+                    // Forza una recarga de la página en el navegador
+                    location.reload(true);
+                });
+            }
+
+            $(document).ready(function () {
+                verificarSesion();
+                $("#salir").click(function () {
+                    cerrarSesion();
+                });
+            });
         </script>
 
 
