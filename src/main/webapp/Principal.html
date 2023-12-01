@@ -83,7 +83,6 @@
                  <a class="btn btn-primary btn-xl text-uppercase" href="registro.html">Registrarme</a>-->
             </div>
         </header>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <!--<script>
             $(document).ready(function () {
                 // Obtener el nombre de usuario almacenado en LocalStorage mas na
@@ -291,28 +290,34 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
-                $.getJSON("validarSesion", function (data) {
-    console.log("Resultado de validarSesion:", data.resultado);
-    if (data.resultado === "ok") {
-        console.log("Redirigiendo a Principal.html");
-        $(location).attr('href', "Principal.html");
-    } else {
-        console.log("Redirigiendo a index.html");
-        $(location).attr('href', "index.html");
-    }
-});
+            $(document).ready(function () {
+                verificarSesion();
+            });
 
-                        // CERRAR SESIÓN   
-                        $("#cerrarSesion").click(function (event) {
-                            event.preventDefault(); // Prevenir la acción predeterminada del enlace
-                            cerrarSesion();
-                            $(location).attr('href', "index.html");
-                        });
-                    });
+            function verificarSesion() {
+                $.ajax({
+                    url: 'validarSesion',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.resultado === "ok") {
+                            //$("#usernameSpan").text(response.logiUsua);
+                        } else {
+                            // El usuario no está autenticado, redirigir a index.html
+                            console.log("Redirigiendo a index.html");
+                            window.location.href = "index.html";
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Error: " + textStatus + ", " + errorThrown);
+                        // Si ocurre un error, redirigir a index.html
+                        window.location.href = "index.html";
+                    }
                 });
+            }
         </script>
-
 
 
         <link href="bot/chat.css" rel="stylesheet" type="text/css"/>

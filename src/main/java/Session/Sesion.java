@@ -18,10 +18,10 @@ public class Sesion {
         session.setAttribute("passUsua", passUsua);
     }
 
-    public static boolean sesionvalida(HttpSession session) {
-        String logueado = (String) session.getAttribute("logueado");
-        if (logueado.equals("1")) {
-            return true;
+    public static boolean sesionValida(HttpSession session) {
+        if (session != null) {
+            String logueado = (String) session.getAttribute("logueado");
+            return "1".equals(logueado);
         }
         return false;
     }
@@ -33,9 +33,9 @@ public class Sesion {
         session.invalidate();
     }
 
-    public static int getCodiUsua(HttpSession session) {
-        Object ocodigo = session.getAttribute("codiUsua");
-        return Integer.parseInt(ocodigo.toString());
+    public static String getpassUsua(HttpSession session) {
+        Object opass = session.getAttribute("passUsua");
+        return opass.toString();
     }
 
     public static String getLogiUsua(HttpSession session) {

@@ -32,27 +32,29 @@ public class ValidarSesion extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            try {
-                HttpSession session = request.getSession(true);
-                String logueado = (String) session.getAttribute("logueado");
+        response.setContentType("application/json;charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        try {
+            HttpSession session = request.getSession(true);
+            String logueado = (String) session.getAttribute("logueado");
 
-                if (logueado == null || !logueado.equals("1")) {
-                    out.println("{\"resultado\":\"error\"}");
-                } else {
-                    String logiUsua = (String) session.getAttribute("logiUsua");
-                    String passUsua = (String) session.getAttribute("passUsua");
-                    out.println("{\"resultado\":\"ok\",\"logiUsua\":\"" + logiUsua + "\",\"passUsua\":\"" + passUsua + "\"}");
-                }
-            } catch (Exception ex) {
-                out.println("{\"resultado\":\"error\"}");
+            if (logueado == null || !logueado.equals("1")) {
+                response.sendRedirect("index.html");
+                return;
             }
+
+            String logiUsua = (String) session.getAttribute("logiUsua");
+            String passUsua = (String) session.getAttribute("passUsua");
+
+            // Si llegamos hasta aquí, la sesión es válida, puedes imprimir la respuesta JSON
+            out.println("{\"resultado\":\"ok\",\"logiUsua\":\"" + logiUsua + "\",\"logiUsua\":\"" + logiUsua + "\",\"passUsua\":\"" + passUsua + "\"}");
+        } catch (Exception ex) {
+            // Manejar excepciones y redirigir a index.html
+            response.sendRedirect("index.html");
         }
     }
-
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+
     /**
      * Handles the HTTP <code>GET</code> method.
      *
