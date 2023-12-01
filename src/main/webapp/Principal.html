@@ -61,10 +61,11 @@
                                     Cambiar contraseña
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index.html">
+                                <a id="cerrarSesion" class="dropdown-item" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Cerrar Sesion
+                                    Cerrar Sesión
                                 </a>
+
                             </div>
                         </li>
                     </ul>
@@ -261,16 +262,6 @@
                             <!--<a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>-->
                         </div>
                     </div>
-                    <div class="col-lg-4">
-                        <div class="team-member">
-                            <img class="mx-auto rounded-circle" src="assets/img/team/1.jpg" alt="..." />
-                            <h4>Erik</h4>
-                            <p class="text-muted">La beba 4</p>
-                            <!-- <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Twitter Profile"><i class="fab fa-twitter"></i></a>-->
-                            <a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker Facebook Profile"><i class="fab fa-facebook-f"></i></a>
-                            <!--<a class="btn btn-dark btn-social mx-2" href="#!" aria-label="Larry Parker LinkedIn Profile"><i class="fab fa-linkedin-in"></i></a>-->
-                        </div>
-                    </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-8 mx-auto text-center"><p class="large text-muted">Bueno este trabajo fue hecho con sudor, sangre y horas sin dormir.</p></div>
@@ -300,6 +291,30 @@
         <!-- * * Activate your form at https://startbootstrap.com/solution/contact-forms * *-->
         <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *-->
         <script src="https://cdn.startbootstrap.com/sb-forms-latest.js"></script>
+        <script>
+                $(document).ready(function () {
+                    $.getJSON("validarsesion", function (data) {
+                        if (data.resultado === "ok") {
+                            // CARGA DE INTERFACES
+                            $('#topbar').load('topbar.html');
+                            // $('#sidebar').load('sidebar.html');
+                            $('#footer').load('footer.html');
+                        } else {
+                            $(location).attr('href', "index.html");
+                        }
+
+                        // CERRAR SESIÓN   
+                        $("#cerrarSession").click(function (event) {
+                            event.preventDefault(); // Prevenir la acción predeterminada del enlace
+                            cerrarSesion();
+                            $(location).attr('href', "index.html");
+                        });
+                    });
+                });
+        </script>
+
+
+
         <link href="bot/chat.css" rel="stylesheet" type="text/css"/>
 
         <!-- Contenedor del chat y del perrito -->
@@ -352,12 +367,10 @@
             var loggedInUsernameSpan = document.getElementById('loggedInUsername'); // Nuevo elemento
 
             var chatOpened = false;
-
             openChatBtn.addEventListener('click', function () {
                 if (!chatOpened) {
                     showPuppyAndPlayAudio(); // Mostrar perrito y reproducir audio al abrir el chat
                     chatOpened = true;
-
                     // Deshabilitar el botón temporalmente por, por ejemplo, 5 segundos
                     openChatBtn.disabled = true;
                     setTimeout(function () {
@@ -365,7 +378,6 @@
                     }, 5000);
                 }
             });
-
             // Función para actualizar el nombre del usuario logueado
             function updateLoggedInUsername() {
                 var username = localStorage.getItem('username');
@@ -374,7 +386,6 @@
 
             // Llamada inicial para mostrar el nombre del usuario si ya está logueado
             updateLoggedInUsername();
-
             function minimizeChat() {
                 chatContainer.style.display = 'none'; // Oculta el chat pero mantiene la visibilidad
             }
@@ -386,10 +397,8 @@
             function sendMessage() {
                 var userInput = document.getElementById('userInput').value;
                 var chatbox = document.getElementById('chatbox');
-
                 // Mostrar el mensaje del usuario en el chatbox
                 chatbox.innerHTML += '<p><strong>Tú:</strong> ' + userInput + '</p>';
-
                 // Simular respuestas del chatbot según la opción elegida por el usuario
                 if (userInput === '1') {
                     chatbox.innerHTML += '<p><strong>Chatbot:</strong> Hola, si claro en nuestra pagina en los encabezados dice separar cita, seleccione su tipo de servicio y la trabajadora que desea.. ¡Provecho! :)</p>';
@@ -400,14 +409,12 @@
                 } else {
                     // Respuesta genérica si no se reconoce la opción
                     chatbox.innerHTML += '<p><strong>Chatbot:</strong> No entiendo. ¿Puedes elegir una opción válida?</p>';
-
                     // Enlace para comunicarse con el administrador
                     chatbox.innerHTML += '<p><strong>Chatbot:</strong> Si no estás conforme con las respuestas, comunícate directamente con el administrador. <a href="chat.jsp">Haz clic aquí</a></p>';
                 }
 
                 // Limpiar el campo de entrada
                 document.getElementById('userInput').value = '';
-
                 // Hacer scroll hacia abajo para mostrar el último mensaje
                 chatbox.scrollTop = chatbox.scrollHeight;
             }
@@ -417,10 +424,8 @@
                 var welcomeAudio = document.getElementById('welcomeAudio');
                 var chatbox = document.getElementById('chatbox');
                 var loggedInUsernameSpan = document.getElementById('loggedInUsername');
-
                 // Obtener la hora actual
                 var currentHour = new Date().getHours();
-
                 // Definir el saludo basado en la hora del día
                 var greeting = "";
                 if (currentHour >= 5 && currentHour < 12) {
@@ -436,20 +441,16 @@
 
                 // Reproducir el audio
                 welcomeAudio.play();
-
                 // Mostrar el saludo con el nombre del usuario en el chatbox
                 chatbox.innerHTML += '<p><strong>Chatbot:</strong> ' + greeting + ' ' +
                         (loggedInUsernameSpan.textContent ? loggedInUsernameSpan.textContent + ', ' : '') +
                         '¿En qué puedo ayudarte hoy?</p>';
-
                 // Preguntas
                 chatbox.innerHTML += '<p><strong>Chatbot:</strong> 1. ¿Cómo puedo sacar una cita con las caninas?</p>';
                 chatbox.innerHTML += '<p><strong>Chatbot:</strong> 2. ¿Como puedo ver las trabajadoras del sistema?</p>';
                 chatbox.innerHTML += '<p><strong>Chatbot:</strong> 3. ¿Puedo realizar un cambio de trabajadora luego de separar la cita?</p>';
-
                 // Mostrar la imagen del perrito
                 puppyContainer.style.display = 'flex';
-
                 // Ocultar el gif después de 4 segundos (4000 milisegundos)
                 setTimeout(function () {
                     hidePuppy();
@@ -459,7 +460,6 @@
 
             function hidePuppy() {
                 var puppyContainer = document.getElementById('puppyContainer');
-
                 // Oculta la imagen del perrito
                 puppyContainer.style.display = 'none';
             }
