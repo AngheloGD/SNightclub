@@ -54,6 +54,32 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
         <script>
+            function verificarSesion() {
+                $.ajax({
+                    url: 'validarSesion',
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (response) {
+                        if (response.resultado === "ok") {
+                            //$("#usernameSpan").text(response.logiUsua);
+                        } else {
+                            // El usuario no está autenticado, redirigir a index.html
+                            console.log("Redirigiendo a index.html");
+                            window.location.href = "index.html";
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log("Error: " + textStatus + ", " + errorThrown);
+                        // Si ocurre un error, redirigir a index.html
+                        window.location.href = "index.html";
+                    }
+                });
+            }
+            $(document).ready(function () {
+                verificarSesion();
+            });
+        </script>
+        <script>
             $(document).ready(function () {
                 obtenerInformacionTrabajadoras();
 
