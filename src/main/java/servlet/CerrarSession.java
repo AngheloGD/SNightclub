@@ -21,6 +21,8 @@ import javax.servlet.http.HttpSession;
 @WebServlet(name = "CerrarSession", urlPatterns = {"/cerrarSession"})
 public class CerrarSession extends HttpServlet {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -32,19 +34,17 @@ public class CerrarSession extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/html;charset=UTF-8");
-        response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-        response.setHeader("Pragma", "no-cache");
-        response.setHeader("Expires", "0");
-        HttpSession session = request.getSession();
+        HttpSession session = request.getSession(false);
+
         if (session != null) {
-            session.invalidate();
-            response.getWriter().write("Sesión cerrada exitosamente");
+            Sesion.cerrarsesion(session);
+            response.sendRedirect(request.getContextPath() + "/index.html");
         } else {
-            response.getWriter().write("No se encontró ninguna sesión");
+            response.getWriter().write("No hay sesión para cerrar");
         }
     }
+// <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
      *

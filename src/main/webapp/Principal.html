@@ -61,10 +61,10 @@
                                     Cambiar contraseña
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a id="salir" class="dropdown-item" >
+                                <button id="salir" class="dropdown-item" >
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Cerrar Sesión
-                                </a>
+                                </button>
 
                             </div>
                         </li>
@@ -316,20 +316,18 @@
 
             function cerrarSesion(redirectURL) {
                 $.getJSON("cerrarSession", function (data) {
-                    // Después de cerrar sesión, reemplaza la entrada actual en el historial
-                    // con una nueva entrada que apunta a "index.html".
-                    history.replaceState({}, 'Index', 'index.html');
-
                     // Redirige a la URL de redirección especificada (o a "index.html" por defecto)
                     if (redirectURL) {
-                        window.location.href = redirectURL;
+                        window.location.replace(redirectURL);
                     } else {
-                        window.location.href = "index.html";
+                        window.location.replace("index.html");
                     }
-
-                    // Forza una recarga de la página en el navegador
-                    location.reload(true);
-                });
+                })
+                        .fail(function () {
+                            console.error("Error al cerrar sesión");
+                            // Si ocurre un error al cerrar sesión, redirige a index.html de todos modos
+                            window.location.replace("index.html");
+                        });
             }
 
             $(document).ready(function () {
@@ -339,8 +337,6 @@
                 });
             });
         </script>
-
-
         <link href="bot/chat.css" rel="stylesheet" type="text/css"/>
 
         <!-- Contenedor del chat y del perrito -->
@@ -384,7 +380,7 @@
         </div>
 
         <!-- Botón para abrir el chat y mostrar el perrito con música 
-        <button id="openChatBtn">Abrir Chat</button>-->
+    <button id="openChatBtn">Abrir Chat</button>-->
 
         <!-- Tu código JavaScript -->
         <script>
