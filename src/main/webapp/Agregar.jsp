@@ -14,32 +14,32 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
     </head>
-<body style="background-image: url('assets/img/contraseña.jpg'); background-size: cover; background-position: center; background-attachment: fixed; margin: 0; padding: 0; font-family: Arial, sans-serif;">
+    <body style="background-image: url('assets/img/contraseña.jpg'); background-size: cover; background-position: center; background-attachment: fixed; margin: 0; padding: 0; font-family: Arial, sans-serif;">
 
-    <div class="form-container" style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #000; border-radius: 5px; background-color: #333; color: #fff;">
+        <div class="form-container" style="max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #000; border-radius: 5px; background-color: #333; color: #fff;">
 
-        <h1 style="text-align: center; color: #ff0000;">Registro de Usuarios</h1>
+            <h1 style="text-align: center; color: #ff0000;">Registro de Usuarios</h1>
 
-        <form action="agregarUsu" method="post">
-            <label for="codiUsua" style="color: #ff0000;">Número de DNI:</label>
-            <input type="text" id="codiUsua" name="codiUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
+            <form action="agregarUsu" method="post">
+                <label for="codiUsua" style="color: #ff0000;">Número de DNI:</label>
+                <input type="text" id="codiUsua" name="codiUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
 
-            <label for="logiUsua" style="color: #ff0000;">Usuario:</label>
-            <input type="text" id="logiUsua" name="logiUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
+                <label for="logiUsua" style="color: #ff0000;">Usuario:</label>
+                <input type="text" id="logiUsua" name="logiUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
 
-            <label for="passUsua" style="color: #ff0000;">Contraseña:</label>
-            <input type="password" id="passUsua" name="passUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
+                <label for="passUsua" style="color: #ff0000;">Contraseña:</label>
+                <input type="password" id="passUsua" name="passUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
 
-            <label for="nombUsua" style="color: #ff0000;">Nombre:</label>
-            <input type="text" id="nombUsua" name="nombUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
+                <label for="nombUsua" style="color: #ff0000;">Nombre:</label>
+                <input type="text" id="nombUsua" name="nombUsua" required style="width: 100%; padding: 10px; margin-bottom: 10px; background-color: #333; color: #fff; border: 1px solid #ff0000;">
 
-            <input type="submit" value="Registrar" id="registrarBtn" style="background-color: #ff0000; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">
-        </form>
+                <input type="submit" value="Registrar" id="registrarBtn" style="background-color: #ff0000; color: #fff; padding: 10px 20px; border: none; cursor: pointer;">
+            </form>
 
-        <div class="alert alert-success" role="alert" id="mensajeAlerta" style="display: none; background-color: #ff0000; color: #fff; padding: 10px; text-align: center; margin-top: 10px;">
-            Registro exitoso
+            <div class="alert alert-success" role="alert" id="mensajeAlerta" style="display: none; background-color: #ff0000; color: #fff; padding: 10px; text-align: center; margin-top: 10px;">
+                Registro exitoso
+            </div>
         </div>
-    </div>
 
         <script src="node_modules/crypto-js/crypto-js.js"></script>
 
